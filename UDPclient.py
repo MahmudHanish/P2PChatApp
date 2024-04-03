@@ -1,24 +1,25 @@
-from socket import *
+import socket
 import json
-
-
-server_address = ('10.0.20.185', 12000)
+import time
 
 # Create a UDP socket
-clientSocket = socket(AF_INET, SOCK_DGRAM)
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# json meta data
-user = '{"username":""}'
-temp = json.loads(user)
+# Server address and port
+server_address = ('192.168.1.39', 12000)
 
-username = input("whats ur username? ")
+# Client ID
+client_id = input("Enter your ID: ")
 
-temp["username"] = username 
 
-clientSocket.sendto(temp["username"].encode("utf-8"),server_address)
+# Call this function to display available users
+while True:
+    # Create JSON message
+    message = json.dumps({'id': client_id})
+    
+    # Send periodic announcements to the server
+    client_socket.sendto(message.encode(), server_address)
+    
+    # Wait for a while before sending the next announcement
+    time.sleep(8)  # Adjust as needed for periodic announcements
 
-modifiedMessage, server = clientSocket.recvfrom(2048)
-
-print(modifiedMessage.decode("utf-8"))
-
-clientSocket.close()
