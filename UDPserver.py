@@ -9,7 +9,7 @@ server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 # Bind the socket to the server address and port
-server_address = ('192.168.1.39', 12000)
+server_address = ('192.168.1.33', 6000)
 server_socket.bind(server_address)
 
 # Dictionary to store peer IDs and last seen timestamps
@@ -19,17 +19,29 @@ clients = {}
 
 print("Server is listening on", server_address)
 
+# def display_available_users(peer_dict):
+#     current_time = time.time()
+#     print("Available users:")
+#     for peer_id, last_seen in peer_dict.items():
+#         if current_time - last_seen <= 900:
+#             status = "(Online)"
+#         elif current_time - last_seen <= 10:
+#             status = "(Away)"
+#         else:
+#             continue
+#         print(f"{peer_id} {status}")
 def display_available_users(peer_dict):
     current_time = time.time()
-    print("Available users:")
+    available_users = "Available users:\n"
     for peer_id, last_seen in peer_dict.items():
-        if current_time - last_seen <= 900:
+        if current_time - last_seen <= 10:
             status = "(Online)"
-        elif current_time - last_seen <= 10:
+        elif current_time - last_seen > 10:
             status = "(Away)"
         else:
             continue
-        print(f"{peer_id} {status}")
+        available_users += f"{peer_id} {status}\n"
+    return available_users
 
 while True:
     # Receive message from client
@@ -52,7 +64,8 @@ while True:
 
     for name, addr in clients.items():
         if addr != client_address:
-            server_socket.sendto(display_available_users(peer_dict), addr)
+            server_socket.sendto(str(display_available_users(peer_dict)).encode(), addr)
+    
 
     time.sleep(8)  # Adjust as needed for periodic announcements
 
