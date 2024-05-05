@@ -3,9 +3,9 @@ import json
 import time
 
 
-
 server_address = ('', 6000)
 # Dictionary to store client information (indexed by username and IP address)
+
 clients = {}
 
 def display_available_users(clients, addr):
@@ -24,7 +24,7 @@ def display_available_users(clients, addr):
 
 def peerDiscovery():
     print("Server is listening on", server_address)
-        # Create a UDP socket for server
+    # Create a UDP socket for server
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     # Set socket options to allow multiple sockets to bind to the same port
@@ -43,12 +43,10 @@ def peerDiscovery():
         clients[(username, client_address[0])] = (client_address, time.time())
         # Send the list of available users to the client
         display_available_users(clients, client_address)
-        getClients()
         time.sleep(8)  # Adjust as needed for periodic announcements
 
-def getClients():
-    return clients
     
 
 if __name__=="__main__":
     peerDiscovery()
+
