@@ -14,6 +14,13 @@ serverUDPaddress = ('192.168.1.255', 6000)
 client_id = input("Enter your ID: ")
 
 # Storeing your username in a json format
+username = {'username': client_id}
+file_path = 'username.json'
+
+# Write the variable to the JSON file
+with open(file_path, 'w') as file:
+    json.dump(username,file)
+
 username = json.dumps({'username': client_id})
 
 
